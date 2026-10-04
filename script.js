@@ -1,4 +1,4 @@
-﻿/* =========================================
+/* =========================================
    EBRAHIM ZAHER PORTFOLIO — SCRIPTS
    ========================================= */
 
@@ -278,13 +278,33 @@ if (contactForm) {
     btn.disabled = true;
     btn.textContent = 'Sending...';
 
-    // Simulate sending (replace with real EmailJS or backend call)
-    setTimeout(() => {
+    // Send data to FormSubmit API
+    fetch('https://formsubmit.co/ajax/ebrahimzaherr0@gmail.com', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        message: message,
+        _subject: `New Portfolio Message from ${name}`
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
       btn.disabled = false;
       btn.textContent = 'Send Message';
       contactForm.reset();
       showFormToast('Message sent! I will get back to you soon.', 'success');
-    }, 1500);
+    })
+    .catch(error => {
+      console.error(error);
+      btn.disabled = false;
+      btn.textContent = 'Send Message';
+      showFormToast('Error sending message. Please try again.', 'error');
+    });
   });
 }
 
